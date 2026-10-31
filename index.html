@@ -1,0 +1,131 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart Healthcare Project Management System</title>
+<style>
+:root{--bg:#eef2f4;--card:#fff;--tx:#17262d;--mu:#5d7079;--bd:#dbe3e7;--ac:#0e7c86;--acd:#0a5c64;--side:#0f2f3a;--sidetx:#b4cad1;--bad:#b3261e;--ok:#1b7a43;--warn:#a96100;--hov:rgba(14,124,134,.09)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d161a;--card:#152127;--tx:#e4edf0;--mu:#8fa5ad;--bd:#26373e;--ac:#3ec1cc;--acd:#2aa3ae;--side:#091216;--sidetx:#8fa9b1;--bad:#ff8a7e;--ok:#5fcf8b;--warn:#f0b04a;--hov:rgba(62,193,204,.12)}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+.app{display:flex;min-height:100vh}aside{width:236px;flex:none;background:var(--side);color:var(--sidetx);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}.brand b{display:block;color:#fff;font-size:17px;letter-spacing:.2px}.brand span{font-size:12px}
+nav{display:flex;flex-direction:column;padding:10px 8px;gap:2px;flex:1;overflow:auto}
+nav button{background:none;border:0;border-left:3px solid transparent;border-radius:6px;color:var(--sidetx);text-align:left;padding:9px 12px}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}nav button.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:#4fd1dc;font-weight:600}
+.side-f{padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;display:flex;flex-direction:column;gap:8px}.side-f button{background:none;color:var(--sidetx);border-color:rgba(255,255,255,.25)}.side-f button:hover{color:#fff;border-color:#fff}
+.col{flex:1;min-width:0}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+.top h1{margin:0;font-size:20px;font-weight:650}main{padding:24px 28px 48px;max-width:1360px}
+button,select,input,textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:7px 11px}
+button{cursor:pointer;transition:background .15s,border-color .15s}button:hover{border-color:var(--ac)}
+button.pri{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600}button.pri:hover{background:var(--acd)}button.ok{background:var(--ok);color:#fff;border-color:var(--ok);font-weight:600}button.no{background:var(--bad);color:#fff;border-color:var(--bad);font-weight:600}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}input:focus,select:focus,textarea:focus{border-color:var(--ac);outline:none;box-shadow:0 0 0 3px var(--hov)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;margin-bottom:18px}
+h2{margin:0 0 4px;font-size:18px}h3{margin:0 0 12px;font-size:15px;font-weight:650}main>h2{display:none}.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%}th,td{padding:9px 12px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}th{color:var(--mu);font-weight:600;font-size:12.5px;background:var(--bg);white-space:nowrap}th:first-child{border-radius:6px 0 0 6px}th:last-child{border-radius:0 6px 6px 0}
+td.n{text-align:right;font-variant-numeric:tabular-nums}tr.row{cursor:pointer}tr.row:hover{background:var(--hov)}tr.sel{background:var(--hov);box-shadow:inset 3px 0 0 var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}label{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--mu);font-weight:600}label input,label select,label textarea{width:100%;font-weight:400}textarea{min-height:68px;resize:vertical}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:18px}.kpi{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac)}.kpi span:first-child{display:block;color:var(--mu);font-size:12.5px;font-weight:600}.kpi b{display:block;font-size:24px;font-weight:650;margin:2px 0;font-variant-numeric:tabular-nums}.kpi span{color:var(--mu);font-size:12px}
+.bad{color:var(--bad)}.okc{color:var(--ok)}.warnc{color:var(--warn)}.kpi b.bad,.kpi b.okc,.kpi b.warnc{font-weight:700}
+.w{padding:10px 14px;border-radius:8px;margin:6px 0;border-left:4px solid;background:var(--bg)}.w.critical{border-color:var(--bad);color:var(--bad);font-weight:600}.w.warning{border-color:var(--warn);color:var(--warn);font-weight:600}.w.info{border-color:var(--ac);color:var(--tx)}
+.bdg{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--bg);color:var(--mu);border:1px solid var(--bd)}.bdg.g{color:var(--ok);background:rgba(27,122,67,.12);border-color:transparent}.bdg.r{color:var(--bad);background:rgba(179,38,30,.12);border-color:transparent}.bdg.a{color:var(--warn);background:rgba(169,97,0,.13);border-color:transparent}.bdg.b{color:var(--ac);background:var(--hov);border-color:transparent}
+#msg{display:none;position:fixed;top:14px;right:18px;z-index:20;padding:11px 18px;border-radius:8px;color:#fff;max-width:440px;box-shadow:0 6px 24px rgba(0,0,0,.25)}#msg.bad{background:#b3261e}#msg.ok{background:#1b7a43}
+.bar{height:10px;background:var(--bd);border-radius:5px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+.gr{display:flex;align-items:center;height:30px;border-bottom:1px solid var(--bd)}.gl{width:230px;flex:none;font-size:12.5px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-right:8px}.gt{position:relative;flex:1;height:100%;border-left:1px solid var(--bd)}
+.gb{position:absolute;top:4px;height:5px;background:var(--mu);opacity:.45;border-radius:2px}.gc{position:absolute;top:11px;height:14px;border-radius:3px;background:var(--ac);overflow:hidden}.gc i{display:block;height:100%;background:rgba(0,0,0,.3)}
+.gc.late{background:var(--bad)}.gc.push{background:var(--warn)}.vl{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--bad)}.vs{position:absolute;top:0;bottom:0;width:0;border-left:2px solid var(--ok)}
+.dia{position:absolute;top:8px;width:13px;height:13px;transform:rotate(45deg);background:var(--ac);margin-left:-6px}.dia.late{background:var(--bad)}.dia.done{background:var(--ok)}
+.mx{display:grid;grid-template-columns:40px repeat(5,1fr);gap:4px;max-width:560px}.mx div{min-height:44px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#111;text-align:center}
+.pd{display:flex;gap:10px;align-items:stretch;margin-bottom:12px;flex-wrap:wrap}.pd>div{border:1px solid var(--bd);border-radius:8px;padding:10px 12px;flex:1;min-width:180px;background:var(--bg)}.pd .h{border-left:4px solid var(--bad)}.pd .p{border-left:4px solid var(--ok)}.pd .c{border-left:4px solid var(--warn)}.pd small{display:block;color:var(--mu);font-weight:600;margin-bottom:2px}
+ul.tree{list-style:none;padding-left:22px;margin:3px 0;border-left:1px solid var(--bd)}ul.tree.top{padding-left:0;border:0}ul.tree li{margin:4px 0}ul.tree li>span:first-child{display:inline-block;padding:3px 8px;border-radius:6px}.tk{color:var(--ac);font-size:12px}.tag{font-size:12px;color:var(--mu)}
+@media(max-width:820px){.app{flex-direction:column}aside{width:auto;height:auto;position:static}nav{flex-direction:row;flex-wrap:wrap}.side-f{display:none}main{padding:16px}.top{padding:12px 16px}}
+</style></head><body>
+<div class="app"><aside><div class="brand"><b>Smart Healthcare PMS</b><span>Project management and monitoring</span></div><nav id="nav"></nav><div class="side-f"><span id="hs"></span><button onclick="resetDb()">Reset sample data</button></div></aside>
+<div class="col"><div class="top"><h1 id="title"></h1><span id="pill" class="bdg b"></span></div><div id="msg"></div><main id="main"></main></div></div>
+<script>
+const $=s=>document.querySelector(s);let S={},cur='dash',lastImpact=null;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fm=n=>Number(n).toLocaleString('en-US',{maximumFractionDigits:0}),f2=n=>n==null?'n/a':Number(n).toFixed(2);
+async function api(m,p,b){const r=await fetch('/api/'+p,{method:m,headers:{'Content-Type':'application/json'},body:b?JSON.stringify(b):undefined});const j=await r.json();if(!r.ok){msg(j.error,1);throw new Error(j.error)}return j}
+function msg(t,bad){const e=$('#msg');e.textContent=t;e.className=bad?'bad':'ok';e.style.display='block';clearTimeout(msg.t);msg.t=setTimeout(()=>e.style.display='none',6000)}
+const BM={Approved:'g',Achieved:'g',Pass:'g',Resolved:'g',Closed:'g',Executing:'b','In Progress':'b',Pending:'a',Proposed:'a',Open:'r',Rejected:'r',Fail:'r',Critical:'r',High:'a','On Hold':'a'};
+const cell=v=>BM[v]?`<span class="bdg ${BM[v]}">${esc(v)}</span>`:esc(v);
+const lab=r=>r.code?r.code+' '+r.name:(r.name||r.title||r.description||r.id);
+const W=ws=>ws.length?ws.map(w=>`<div class="w ${w.level}">${esc(w.msg)}</div>`).join(''):'<div class="w info">No warnings. Project performance is within thresholds.</div>';
+const kpi=(t,v,s,c='')=>`<div class="kpi"><span>${t}</span><b class="${c}">${v}</b><span>${s||''}</span></div>`;
+const tbl=(cols,rs)=>`<div class="scroll"><table><tr>${cols.map(c=>`<th>${c[0]}</th>`).join('')}</tr>${rs.length?rs.map(r=>`<tr>${cols.map(c=>`<td>${c[1](r)}</td>`).join('')}</tr>`).join(''):`<tr><td colspan=${cols.length}>None</td></tr>`}</table></div>`;
+function field(f,opts){const[n,l,t,r]=f,L=`<label>${l}${r?' *':''}`;
+ if(t.startsWith('sel:'))return`${L}<select name="${n}">${t.slice(4).split('|').map(o=>`<option>${o}</option>`).join('')}</select></label>`;
+ if(t.startsWith('ref:'))return`${L}<select name="${n}"><option value="">-- none --</option>${opts.map(o=>`<option value="${o.id}">${o.id}: ${esc(lab(o))}</option>`).join('')}</select></label>`;
+ if(t=='area')return`${L}<textarea name="${n}"></textarea></label>`;
+ return`${L}<input name="${n}" type="${t=='date'?'date':(t=='int'||t=='num')?'number':'text'}" ${t=='num'?'step="any"':''}></label>`}
+async function refs(sp){const r={};for(const f of sp)if(f[2].startsWith('ref:'))r[f[0]]=await api('GET',f[2].slice(4));return r}
+async function crud(el,t,o={}){const sp=S[t],rs=await api('GET',t),rf=await refs(sp);let id=null;
+ const cols=rs.length?Object.keys(rs[0]):['id',...sp.map(f=>f[0])];
+ el.innerHTML=`<div class="card"><h3>${o.title||t}</h3><div class="scroll"><table><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr>${rs.map(r=>`<tr class="row" data-id="${r.id}">${cols.map(c=>`<td${typeof r[c]=='number'?' class=n':''}>${cell(r[c])}</td>`).join('')}</tr>`).join('')}</table></div></div>
+ <div class="card"><h3>${o.title||t}: add / edit (click a row to edit it)</h3><div class="grid">${sp.map(f=>field(f,rf[f[0]])).join('')}</div>
+ <p><button class="pri" data-a="save">Save</button> <button data-a="del">Delete</button> <button data-a="clr">New</button> ${o.btns||''}</p></div>`;
+ const fl=()=>el.querySelectorAll('[name]'),form=()=>{const d={};fl().forEach(i=>d[i.name]=i.value);return d};
+ const done=m=>{msg(m);show(cur)};
+ el.onclick=async e=>{const tr=e.target.closest('tr.row'),a=e.target.dataset.a;
+  if(tr){id=tr.dataset.id;const r=rs.find(x=>x.id==id);fl().forEach(i=>i.value=r[i.name]??'');el.querySelectorAll('tr.row').forEach(x=>x.classList.toggle('sel',x==tr));return}
+  if(!a)return;
+  if(a=='clr'){id=null;fl().forEach(i=>i.value='');el.querySelectorAll('tr.sel').forEach(x=>x.classList.remove('sel'))}
+  else if(a=='save'){await api(id?'PUT':'POST',id?`${t}/${id}`:t,form());done('Saved')}
+  else if(a=='del'){if(!id)return msg('Select a record first',1);await api('DELETE',`${t}/${id}`);done('Deleted')}
+  else if(o.act){if(!id)return msg('Select a record first',1);await o.act(a,id);show(cur)}}}
+async function single(el,t,title){const sp=S[t],r=await api('GET',t);
+ el.innerHTML=`<div class="card"><h3>${title}</h3><div class="grid">${sp.map(f=>field(f,[])).join('')}</div><p><button class="pri">Save</button></p></div>`;
+ el.querySelectorAll('[name]').forEach(i=>i.value=r[i.name]??'');
+ el.querySelector('button').onclick=async()=>{const d={};el.querySelectorAll('[name]').forEach(i=>d[i.name]=i.value);await api('PUT',t,d);msg('Saved');show(cur)}}
+const sub=(h)=>{const d=document.createElement('div');$('#main').appendChild(d);if(h)d.innerHTML=h;return d};
+const TABS={dash:'Dashboard',init:'Charter & Plan',scope:'Requirements & WBS',chg:'Change Requests',sched:'Schedule & Resources',cost:'Cost & EVM',qual:'Quality',risk:'Risks & PDPC',team:'Team & Milestones'};
+$('#nav').innerHTML=Object.entries(TABS).map(([k,v])=>`<button data-k="${k}">${v}</button>`).join('');
+$('#nav').onclick=e=>{if(e.target.dataset.k){cur=e.target.dataset.k;show(cur)}};
+async function resetDb(){if(confirm('Restore the original sample data? All changes will be lost.')){await api('POST','reset');lastImpact=null;msg('Sample data restored');show(cur)}}
+async function show(k){document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.k==k));$('#main').innerHTML='';
+ try{await R[k]();const c=await api('GET','charter');$('#hs').textContent='Status date: '+c.status_date;$('#pill').textContent=c.status;$('#title').textContent=TABS[k]}catch(e){console.error(e)}}
+const R={
+async dash(){const d=await api('GET','dashboard'),s=d.summary,e=d.evm,p=d.project,b=d.budget;
+ sub(`<h2>Project Dashboard</h2><div class="card"><b>Overall progress (earned value / planned value of all work): ${d.progress}%</b><div class="bar"><i style="width:${d.progress}%"></i></div></div>
+ <div class="kpis">${kpi('Approved budget (PKR)',fm(b.approved),'baseline '+fm(s.baseline_budget)+' + changes '+fm(s.approved_changes_cost))}${kpi('Planned cost (PKR)',fm(b.planned))}${kpi('Actual cost (PKR)',fm(b.actual),'remaining '+fm(b.remaining))}
+ ${kpi('CPI',f2(e.cpi),'threshold '+e.cpi_threshold,e.cpi<e.cpi_threshold?'bad':'okc')}${kpi('SPI',f2(e.spi),'threshold '+e.spi_threshold,e.spi<e.spi_threshold?'bad':'okc')}
+ ${kpi('Projected finish',p.projected_finish,'deadline '+p.deadline+' ('+s.deadline_weeks+' wks)',p.days_past_deadline?'bad':'okc')}${kpi('Pending change requests',d.pending_crs.length,'',d.pending_crs.length?'warnc':'')}
+ ${kpi('Delayed activities',d.delayed.length,'finish slip '+p.finish_slip+' days',d.delayed.length?'warnc':'')}${kpi('Critical defects open',d.critical_defects.length,'',d.critical_defects.length?'bad':'okc')}${kpi('Approved requirements',s.approved_requirements,JSON.stringify(d.requirements))}</div>
+ <div class="card"><h3>Warnings</h3>${W(d.warnings)}</div>
+ <div class="card"><h3>Pending change requests</h3>${tbl([['#',r=>r.id],['Change',r=>esc(r.title)],['Cost (PKR)',r=>fm(r.cost_impact)],['Weeks',r=>r.schedule_impact_weeks]],d.pending_crs)}</div>
+ <div class="card"><h3>Delayed activities and impact</h3>${tbl([['Activity',r=>esc(r.name)],['Delay (d)',r=>r.delay_days],['Finish slip (d)',r=>r.slip],['Impacted dependents',r=>esc(r.impacted.join(', ')||'-')]],d.delayed)}</div>
+ <div class="card"><h3>Unresolved critical defects</h3>${tbl([['#',r=>r.id],['Defect',r=>esc(r.title)],['Status',r=>r.status]],d.critical_defects)}</div>
+ <div class="card"><h3>Top risks</h3>${tbl([['Risk',r=>esc(r.description)],['Score',r=>r.score]],d.top_risks)}</div>`)},
+async init(){await single(sub(),'charter','Project charter (objectives, stakeholders, scope boundaries, budget, deadline, status, closure)');await single(sub(),'plan','Project management plan (scope, schedule, cost, quality)')},
+async scope(){sub('<h2>Requirements, WBS and scope control</h2>');await crud(sub(),'requirements',{title:'Requirements (only Approved requirements may enter the WBS)'});
+ const t=await api('GET','wbs_tree');const node=n=>`<li><span style="background:rgba(11,110,153,.12)"><b>${n.code}</b> ${esc(n.name)}</span> <span class="tag">req #${n.req_id}: ${esc(n.req)}</span>${n.tasks.map(k=>` <span class="tk">[activity ${k.id}: ${esc(k.name)}]</span>`).join('')}${n.children.length?`<ul class="tree">${n.children.map(node).join('')}</ul>`:''}</li>`;
+ sub(`<div class="card"><h3>Work Breakdown Structure (hierarchical)</h3><ul class="tree top">${t.map(node).join('')}</ul></div>`);await crud(sub(),'wbs',{title:'WBS nodes'})},
+async chg(){sub('<h2>Change requests</h2>');
+ if(lastImpact){const a=lastImpact.before,z=lastImpact.after,r=[['Approved requirements','approved_requirements'],['WBS nodes','wbs_nodes'],['Activities','activities'],['Planned cost (PKR)','planned_cost'],['Approved budget (PKR)','budget'],['Deadline (weeks)','deadline_weeks'],['Deadline','deadline'],['Projected finish','projected_finish']];
+  sub(`<div class="card"><h3>Impact of the last decision: ${lastImpact.status}</h3>${tbl([['Item',x=>x[0]],['Before',x=>typeof a[x[1]]=='number'?fm(a[x[1]]):a[x[1]]],['After',x=>typeof z[x[1]]=='number'?fm(z[x[1]]):z[x[1]]]],r)}</div>`)}
+ await crud(sub(),'change_requests',{title:'Change requests (select one, then Approve or Reject)',btns:'<button class="ok" data-a="Approved">Approve</button> <button class="no" data-a="Rejected">Reject</button>',
+  act:async(a,id)=>{lastImpact=await api('POST',`change_requests/${id}/decide`,{status:a});msg('Change request '+a.toLowerCase()+'. Scope, schedule and budget updated.')}})},
+async sched(){const a=await api('GET','analysis'),P=a.project,max=Math.max(P.current_end,P.deadline_offset)+7,pc=x=>(x/max*100)+'%',wd=(x,y)=>Math.max(.4,(y-x)/max*100)+'%';
+ let ax='';for(let d=0;d<=max;d+=14)ax+=`<span style="position:absolute;left:${pc(d)};font-size:10px;color:var(--mu)">W${d/7}</span>`;
+ const lines=`<div class="vl" style="left:${pc(P.deadline_offset)}"></div><div class="vs" style="left:${pc(a.evm.status_offset)}"></div>`;
+ let g=`<div class="gr"><div class="gl"></div><div class="gt" style="border:0">${ax}</div></div>`;
+ for(const t of a.tasks)g+=`<div class="gr" title="Planned ${t.base_start}-${t.base_end}d; current ${t.start_date} to ${t.end_date}"><div class="gl">${t.id}. ${esc(t.name)}</div><div class="gt">${lines}<div class="gb" style="left:${pc(t.base_start)};width:${wd(t.base_start,t.base_end)}"></div><div class="gc ${t.delay_days?'late':t.pushed?'push':''}" style="left:${pc(t.start)};width:${wd(t.start,t.end)}"><i style="width:${t.percent}%"></i></div></div></div>`;
+ g+=`<div class="gr"><div class="gl"><b>Milestones</b></div><div class="gt">${lines}${a.milestones.map(m=>`<div class="dia ${m.status=='Achieved'?'done':m.late_days?'late':''}" style="left:${pc(m.projected_offset)}" title="${esc(m.name)}: due ${m.due_date}, projected ${m.projected_date}"></div>`).join('')}</div></div>`;
+ sub(`<h2>Schedule and resources</h2><div class="card"><h3>Gantt chart</h3><div class="scroll"><div style="min-width:760px">${g}</div></div><p class="tag">Grey thin bar = baseline; coloured bar = current schedule (red = delayed, orange = pushed by a predecessor, dark fill = % complete); red dashed line = deadline (${P.deadline}); green line = status date. Diamonds = milestones.</p></div>
+ <div class="card"><h3>Delay analysis</h3>${W(a.warnings.filter(w=>/finish|Delayed|deadline/i.test(w.msg)))}${tbl([['#',t=>t.id],['Activity',t=>esc(t.name)],['Start',t=>t.start_date],['End',t=>t.end_date],['Delay (d)',t=>t.delay_days||'-'],['Finish slip (d)',t=>t.slip||'-'],['Pushed by predecessor',t=>t.pushed?'Yes':'-'],['Impacted dependents',t=>esc(t.impacted.join(', ')||'-')]],a.tasks)}</div>
+ <div class="card"><h3>Milestone status</h3>${tbl([['Milestone',m=>esc(m.name)],['Due',m=>m.due_date],['Projected',m=>m.projected_date],['Status',m=>m.status=='Achieved'?cell('Achieved'):m.late_days?`<span class="bdg r">Late by ${m.late_days} d</span>`:'<span class="bdg g">On track</span>']],a.milestones)}</div>`);
+ await crud(sub(),'tasks',{title:'Activities (assignee, duration, dependencies, cost, progress)'})},
+async cost(){const a=await api('GET','analysis'),e=a.evm,mx=Math.max(e.pv,e.ev,e.ac,1),bar=(n,v,c)=>`<div style="margin:6px 0">${n}: <b>PKR ${fm(v)}</b><div class="bar"><i style="width:${v/mx*100}%;background:${c}"></i></div></div>`;
+ sub(`<h2>Cost management &amp; Earned Value Analysis</h2><p>Status date offset: day ${e.status_offset}. PV is calculated from the baseline schedule, EV = planned cost x % complete, AC = actual expenditure.</p><div class="kpis">${kpi('PV (Planned Value)',fm(e.pv))}${kpi('EV (Earned Value)',fm(e.ev))}${kpi('AC (Actual Cost)',fm(e.ac))}
+ ${kpi('CPI = EV/AC',f2(e.cpi),'threshold '+e.cpi_threshold,e.cpi<e.cpi_threshold?'bad':'okc')}${kpi('SPI = EV/PV',f2(e.spi),'threshold '+e.spi_threshold,e.spi<e.spi_threshold?'bad':'okc')}${kpi('CV = EV-AC',fm(e.cv),'',e.cv<0?'bad':'okc')}${kpi('SV = EV-PV',fm(e.sv),'',e.sv<0?'bad':'okc')}
+ ${kpi('BAC (planned total)',fm(e.bac),'approved budget '+fm(a.summary.budget))}${kpi('EAC = BAC/CPI',fm(e.eac),'',e.eac>a.summary.budget?'bad':'')}${kpi('VAC = BAC-EAC',fm(e.vac))}</div>
+ <div class="card"><h3>Warnings</h3>${W(a.warnings)}</div><div class="card"><h3>PV vs EV vs AC</h3>${bar('PV','' +e.pv,'var(--mu)')}${bar('EV',e.ev,'var(--ok)')}${bar('AC',e.ac,'var(--bad)')}</div>
+ <div class="card"><h3>Cost by activity</h3>${tbl([['Activity',t=>esc(t.name)],['Planned cost',t=>fm(t.cost)],['% done',t=>t.percent],['PV',t=>fm(t.pv)],['EV',t=>fm(t.ev)],['AC',t=>fm(t.ac)],['Cost variance',t=>`<span class="${t.ev-t.ac<0?'bad':''}">${fm(t.ev-t.ac)}</span>`]],a.tasks)}</div><p class="tag">Edit planned/actual costs and % complete in the Schedule tab (Activities form).</p>`)},
+async qual(){sub('<h2>Quality management</h2>');await crud(sub(),'defects',{title:'Defect tracker'});await crud(sub(),'checklist',{title:'Quality checklist and inspection results'})},
+async risk(){sub('<h2>Risk control</h2>');const rs=await api('GET','risks'),lv=s=>s>=15?'#e57373':s>=8?'#ffd54f':'#aed581';
+ let m='<div class="mx"><div></div>'+[1,2,3,4,5].map(i=>`<div style="background:none;color:var(--mu)">I=${i}</div>`).join('');
+ for(let l=5;l>=1;l--){m+=`<div style="background:none;color:var(--mu)">L=${l}</div>`;for(let i=1;i<=5;i++)m+=`<div style="background:${lv(l*i)}">${rs.filter(r=>r.likelihood==l&&r.impact==i).map(r=>'R'+r.id).join(' ')}</div>`}
+ sub(`<div class="card"><h3>Prioritization matrix (score = likelihood x impact)</h3>${tbl([['Rank',r=>rs.indexOf(r)+1],['ID',r=>'R'+r.id],['Risk',r=>esc(r.description)],['L',r=>r.likelihood],['I',r=>r.impact],['Score',r=>`<b>${r.score}</b>`],['Priority',r=>r.score>=15?'<b class=bad>High</b>':r.score>=8?'<b class=warnc>Medium</b>':'Low']],rs)}<br>${m}</div></div>
+ <div class="card"><h3>Process Decision Program Chart (problem → prevention → corrective action)</h3>${rs.map(r=>`<div class="pd"><div><small>Objective</small>Deliver on time, in budget, with quality</div><div class="h"><small>R${r.id} potential problem (score ${r.score})</small>${esc(r.description)}</div><div class="p"><small>Preventive action</small>${esc(r.preventive||'-')}</div><div class="c"><small>If it occurs: corrective action</small>${esc(r.corrective||'-')}</div></div>`).join('')}</div>`);
+ await crud(sub(),'risks',{title:'Risk register'})},
+async team(){sub('<h2>Team and milestones</h2>');await crud(sub(),'team',{title:'Team members'});await crud(sub(),'milestones',{title:'Milestones'})}};
+(async()=>{S=await api('GET','schema');show('dash')})();
+</script></body></html>

@@ -1,0 +1,33 @@
+test01_baseline (test_app.T.test01_baseline)
+TC01 Expected: budget 5,000,000; 16 weeks; planned cost 4,500,000; 9 activities; 6 approved requirements. ... ok
+test02_schedule_cpm (test_app.T.test02_schedule_cpm)
+TC02 Expected: baseline finish day 91; with 7-day delay on activity 3 current finish day 98; slip 7; dependents 6,8,9 impacted. ... ok
+test03_evm (test_app.T.test03_evm)
+TC03 Expected: PV=2,660,714; EV=2,465,000; AC=2,630,000; CPI=0.937; SPI=0.926; both warnings raised. ... ok
+test04_no_warning_when_good (test_app.T.test04_no_warning_when_good)
+TC04 Expected: when actual cost equals earned value and no delay, CPI=1 and no cost warning. ... ok
+test05_unapproved_requirement_blocked (test_app.T.test05_unapproved_requirement_blocked)
+TC05 Expected: a Proposed/CR requirement cannot be added to the WBS (scope protection). ... ok
+test06_change_request_approval (test_app.T.test06_change_request_approval)
+TC06 Expected: approving both CRs -> budget 5,800,000, deadline 19 weeks, requirements 8, activities 11, finish +21 days, scope in WBS. ... ok
+test07_change_request_rejection (test_app.T.test07_change_request_rejection)
+TC07 Expected: rejected CR leaves budget/scope unchanged and requirement Rejected. ... ok
+test08_input_validation (test_app.T.test08_input_validation)
+TC08 Expected: invalid numbers/dates/enums/percent/duration are rejected with ValueError. ... ok
+test09_circular_dependency_and_budget (test_app.T.test09_circular_dependency_and_budget)
+TC09 Expected: cyclic dependency and over-budget activity are rejected. ... ok
+test10_referential_integrity (test_app.T.test10_referential_integrity)
+TC10 Expected: cannot delete activity with dependents, requirement used in WBS, or team member with assignments. ... ok
+test11_closure_rules (test_app.T.test11_closure_rules)
+TC11 Expected: project cannot be closed with critical defects/pending CRs/no notes; can close when resolved. ... ok
+test12_risk_ranking_and_defects (test_app.T.test12_risk_ranking_and_defects)
+TC12 Expected: risks sorted by likelihood x impact (top = 20); 2 unresolved critical defects reported. ... ok
+test13_consistency_uncovered_requirement (test_app.T.test13_consistency_uncovered_requirement)
+TC13 Expected: an approved requirement with no WBS item raises a warning. ... ok
+test14_delay_propagation_updates_deadline (test_app.T.test14_delay_propagation_updates_deadline)
+TC14 Expected: a 30-day delay on activity 8 moves finish past the 16-week deadline and raises a critical warning. ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.296s
+
+OK
